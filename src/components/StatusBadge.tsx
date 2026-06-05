@@ -1,12 +1,15 @@
 import { useSightings, isLive } from "../stores/sightings";
 import { useDayNight } from "../hooks/useDayNight";
+import { useNow } from "../hooks/useNow";
 
 export function StatusBadge() {
+  const now = useNow();
+  const sightings = useSightings((s) => s.sightings);
   // Count distinct cams with a live sighting. Per-frame otter counts from a zero-shot
   // detector are unreliable, so a raft is two or more aquariums active at once
-  const liveCams = useSightings(
-    (s) => new Set(s.sightings.filter(isLive).map((x) => x.cam_id)).size,
-  );
+  const liveCams = new Set(
+    sightings.filter((x) => isLive(x, now)).map((x) => x.cam_id),
+  ).size;
   const isDay = useDayNight();
 
   const label =

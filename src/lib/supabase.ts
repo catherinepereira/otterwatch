@@ -23,7 +23,7 @@ export async function fetchRecentSightings(limit = 50): Promise<Sighting[]> {
 }
 
 // Subscribe to inserts (new sightings) and updates (a sighting ending). The worker
-// writes the rows; Supabase pushes them here. Returns an unsubscribe function
+// writes the rows, Supabase pushes them here. Returns an unsubscribe function
 export function subscribeSightings(
   onInsert: (s: Sighting) => void,
   onUpdate: (s: Sighting) => void,

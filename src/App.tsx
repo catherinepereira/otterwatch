@@ -10,19 +10,20 @@ import { ThemeToggle } from "./components/ThemeToggle";
 import { StreamControls } from "./components/StreamControls";
 import { CreditLine } from "./components/CreditLine";
 import { useNotifyPrefs } from "./stores/notifyPrefs";
+import { useTitleStatus } from "./hooks/useTitleStatus";
 import { playChime } from "./utils/chime";
 import type { Cam, Sighting } from "./types/database";
 
 const sectionTitle = "text-sm font-medium text-text-muted mb-2";
 
-// Only alert when a cam has been quiet for this long, so an active otter session pings
-// once instead of on every sighting
+// Only alert when a cam has been quiet for this long
 const QUIET_WINDOW_MS = 10 * 60 * 1000;
 const lastSeenAt = new Map<string, number>();
 
 export default function App() {
   const { toasts, push, dismiss } = useToasts();
   const [cams, setCams] = useState<Cam[]>([]);
+  useTitleStatus();
 
   useEffect(() => {
     supabase
@@ -38,8 +39,7 @@ export default function App() {
       // Toast and chime are opt-in per cam
       if (!useNotifyPrefs.getState().isEnabled(s.cam_id)) return;
 
-      // Track every sighting's time, but only alert when this aquarium has been quiet
-      // for the whole window, so a continuous otter session pings once, not repeatedly
+      // Track every sighting's time
       const now = Date.now();
       const last = lastSeenAt.get(s.cam_id);
       lastSeenAt.set(s.cam_id, now);
@@ -49,8 +49,6 @@ export default function App() {
       const conf =
         s.confidence != null ? ` (${Math.round(s.confidence * 100)}%)` : "";
       push(`🦦 otter on ${cam?.name ?? s.cam_id}`, `Spotted just now${conf}`);
-      // The chime plays from a background tab too, so it works when unfocused. A fully
-      // closed tab plays nothing (by design)
       playChime();
     },
     [cams, push],
@@ -70,7 +68,7 @@ export default function App() {
         </div>
       </header>
       <p className="text-text-dim mb-6 text-sm">
-        Live video feed otter detection using one-shot{" "}
+        Live video feed sea otter detection using one-shot{" "}
         <a
           href="https://docs.ultralytics.com/models/yolo-world/"
           target="_blank"
@@ -94,7 +92,7 @@ export default function App() {
         <section>
           <div className="mb-2 flex items-center justify-between">
             <h2 className="text-text-muted text-sm font-medium">
-              Live ({cams.length})
+              live ({cams.length})
             </h2>
             <StreamControls />
           </div>
@@ -115,13 +113,13 @@ export default function App() {
         </section>
 
         <section>
-          <h2 className={sectionTitle}>Recent sightings</h2>
+          <h2 className={sectionTitle}>recent sightings</h2>
           <SightingLog />
         </section>
       </div>
 
       <footer className="text-text-dim mt-10 text-xs">
-        Made in honor of{" "}
+        made in honor of{" "}
         <a
           href="https://en.wikipedia.org/wiki/Rosa_(sea_otter)"
           target="_blank"

@@ -1,6 +1,3 @@
-// A short two-note chime via the Web Audio API, so there is no audio file to ship.
-// Browsers block audio until the user interacts with the page; enabling a cam's bell
-// is a click, so by the time a chime would play the context is already unlocked
 let ctx: AudioContext | null = null;
 
 export function playChime() {
@@ -21,7 +18,5 @@ export function playChime() {
       osc.start(start);
       osc.stop(start + 0.2);
     }
-  } catch {
-    // Audio not available or blocked; the toast still shows
-  }
+  } catch {}
 }
