@@ -5,10 +5,6 @@ export function CreditLine() {
       <span>
         made by{" "}
         <Link href="https://github.com/catherinepereira">catherinepereira</Link>
-        , code at{" "}
-        <Link href="https://github.com/catherinepereira/otterwatch">
-          otterwatch
-        </Link>
         , using{" "}
         <Link href="https://github.com/catherinepereira/detstream">
           detstream
