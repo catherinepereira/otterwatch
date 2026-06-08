@@ -9,6 +9,10 @@ export function CreditLine() {
         <Link href="https://github.com/catherinepereira/detstream">
           detstream
         </Link>
+        , in
+        <Link href="https://github.com/catherinepereira/otterwatch-backend">
+          otterwatch-backend
+        </Link>
       </span>
     </div>
   );
