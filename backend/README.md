@@ -11,7 +11,7 @@ deployment, and a Dockerfile. The website is
 ## Setup
 
 ```bash
-cd otterwatch-backend
+cd backend
 python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt  # installs detstream from PyPI with extras
