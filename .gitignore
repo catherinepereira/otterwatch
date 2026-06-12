@@ -1,0 +1,18 @@
+# Node / frontend
+node_modules/
+dist/
+*.local
+.DS_Store
+plan.md
+
+# Python / backend
+venv/
+__pycache__/
+*.pyc
+*.pt
+*.log
+*.pid
+
+# Env files
+.env
+.env.local
