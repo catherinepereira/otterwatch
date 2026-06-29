@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --no-cache-dir --upgrade pip
-RUN pip3 install --no-cache-dir "detstream[yolo,youtube,supabase]~=0.1.0"
+RUN pip3 install --no-cache-dir "detstream[yolo,youtube,supabase]~=0.1.3"
 
 WORKDIR /run
 COPY otterwatch.yaml /run/otterwatch.yaml
