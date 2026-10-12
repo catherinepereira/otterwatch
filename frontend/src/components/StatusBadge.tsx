@@ -14,18 +14,22 @@ export function StatusBadge() {
     sightings.filter((x) => isLive(x, now, online)).map((x) => x.cam_id),
   ).size;
   const isDay = useDayNight();
-  // Cams loaded but none heartbeating: quiet would be a guess, say so instead
+  // Cams loaded but none heartbeating: quiet would be a guess, say so instead. At night the
+  // worker sleeps on purpose, so a missing heartbeat is expected rather than an outage
   const offline = cams.length > 0 && online.size === 0;
 
-  const label = offline
-    ? "detector offline, sightings paused"
-    : liveCams === 0
-      ? isDay
-        ? "otterly quiet..."
-        : "otterly quiet... otters are resting 🌙"
-      : liveCams === 1
-        ? "live otter action happening"
-        : "RAFT ALERT! MULTIPLE OTTERS SIGHTED!";
+  const label =
+    !isDay && offline
+      ? "otters are resting 🌙 detector back at sunrise"
+      : offline
+        ? "detector offline, sightings paused"
+        : liveCams === 0
+          ? isDay
+            ? "otterly quiet..."
+            : "otterly quiet... otters are resting 🌙"
+          : liveCams === 1
+            ? "live otter action happening"
+            : "RAFT ALERT! MULTIPLE OTTERS SIGHTED!";
 
   const raft = liveCams > 1;
   const dotStyle = raft

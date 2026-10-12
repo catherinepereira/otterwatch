@@ -7,10 +7,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --no-cache-dir --upgrade pip
-RUN pip3 install --no-cache-dir "detstream[yolo,youtube,supabase]~=0.2.0"
+COPY requirements.txt /run/requirements.txt
+RUN pip3 install --no-cache-dir -r /run/requirements.txt
 
 WORKDIR /run
-COPY otterwatch.yaml /run/otterwatch.yaml
+COPY otterwatch.yaml run.py snapshot_source.py /run/
 
 # Pushes out to Supabase/Discord, so there is no inbound port to expose.
-CMD ["python3", "-m", "detstream", "--config", "/run/otterwatch.yaml"]
+CMD ["python3", "run.py", "--config", "/run/otterwatch.yaml"]

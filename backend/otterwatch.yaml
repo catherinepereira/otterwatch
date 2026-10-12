@@ -4,9 +4,9 @@ detector_defaults: &detector
   confidence_threshold: 0.35
 
 debounce_defaults: &debounce
-  sample_interval_s: 1.0
+  sample_interval_s: 15.0
   enter_frames: 2
-  exit_frames: 5
+  exit_frames: 4
   cooldown_s: 60
 
 sinks:
@@ -27,28 +27,28 @@ sinks:
 feeds:
   - id: monterey-otters
     name: Monterey Bay Aquarium
-    source: { type: youtube, url: "https://www.youtube.com/watch?v=abbR-Ttd-cA", max_height: 480 }
+    source: { type: youtube-snapshot, url: "https://www.youtube.com/watch?v=abbR-Ttd-cA", max_height: 480 }
     detector: *detector
     debounce: *debounce
-    sinks: [console, supabase, discord]
+    sinks: [console, supabase]
 
   - id: vancouver-otters-1
     name: Vancouver Aquarium (Cam 1)
-    source: { type: youtube, url: "https://www.youtube.com/watch?v=9mg9PoFEX2U", max_height: 480 }
+    source: { type: youtube-snapshot, url: "https://www.youtube.com/watch?v=9mg9PoFEX2U", max_height: 480 }
     detector: *detector
     debounce: *debounce
-    sinks: [console, supabase, discord]
+    sinks: [console, supabase]
 
   - id: vancouver-otters-2
     name: Vancouver Aquarium (Cam 2)
-    source: { type: youtube, url: "https://www.youtube.com/watch?v=_KXHUb0wFRE", max_height: 480 }
+    source: { type: youtube-snapshot, url: "https://www.youtube.com/watch?v=_KXHUb0wFRE", max_height: 480 }
     detector: *detector
     debounce: *debounce
-    sinks: [console, supabase, discord]
+    sinks: [console, supabase]
 
   - id: seattle-otters
     name: Seattle Aquarium
-    source: { type: youtube, url: "https://www.youtube.com/watch?v=NqOmHpwMUxs", max_height: 480 }
+    source: { type: youtube-snapshot, url: "https://www.youtube.com/watch?v=NqOmHpwMUxs", max_height: 480 }
     detector: *detector
     debounce: *debounce
-    sinks: [console, supabase, discord]
+    sinks: [console, supabase]

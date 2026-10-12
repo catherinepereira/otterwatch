@@ -21,13 +21,19 @@ cp .env.example .env             # then fill in your Supabase keys and Discord w
 ## Run
 
 ```bash
-detstream --config otterwatch.yaml
+python run.py --config otterwatch.yaml
 ```
+
+`run.py` is `detstream` with this repo's `youtube-snapshot` source registered
+(`snapshot_source.py`). Instead of decoding each live stream continuously, it fetches one ~5s
+HLS segment per `sample_interval_s` (15s) and detects on its first frame, which cuts bandwidth
+by roughly 5x. It also sleeps from sunset until 10 minutes before sunrise (Pacific, the same
+reference point as the frontend), and the site shows the cams as resting instead of offline.
 
 The feeds list `sinks: [console, supabase, discord]`. Console needs nothing. The supabase
 sink reads `DETSTREAM_SUPABASE_URL` and `DETSTREAM_SUPABASE_KEY` from `.env`, and the discord
 sink reads `DETSTREAM_DISCORD_WEBHOOK_URL`. Without those vars the sinks error at startup.
-Watch for `spotted on Monterey Bay Aquarium` lines.
+Watch for `sighting on Monterey Bay Aquarium` lines.
 
 On first run YOLO-World downloads its weights (~26MB), and ultralytics fetches CLIP the
 first time the detector runs.
@@ -50,7 +56,7 @@ cd ~/otterwatch/backend
 uv venv venv --seed --python 3.12   # --seed adds pip, which ultralytics uses to install CLIP
 uv pip install --python venv/bin/python -r requirements.txt
 cp .env.example .env                # then fill it in
-caffeinate -s venv/bin/detstream --config otterwatch.yaml
+caffeinate -s venv/bin/python run.py --config otterwatch.yaml
 ```
 
 `caffeinate -s` keeps the Mac awake on power for as long as the worker runs. Closing the lid

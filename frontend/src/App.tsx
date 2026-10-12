@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useRealtimeSightings } from "./hooks/useRealtimeSightings";
 import { useCamsPolling } from "./hooks/useCamsPolling";
 import { useNow } from "./hooks/useNow";
+import { useDayNight } from "./hooks/useDayNight";
 import { useToasts } from "./hooks/useToasts";
 import { StatusBadge } from "./components/StatusBadge";
 import { LiveEmbed } from "./components/LiveEmbed";
@@ -27,6 +28,8 @@ export default function App() {
   const { toasts, push, dismiss } = useToasts();
   const cams = useCams((s) => s.cams);
   const now = useNow();
+  // The worker sleeps between sunset and sunrise, so cams are only flagged offline by day
+  const isDay = useDayNight();
   useCamsPolling();
   useTitleStatus();
 
@@ -102,7 +105,7 @@ export default function App() {
                     id={cam.id}
                     youtubeUrl={cam.youtube_url}
                     name={cam.name}
-                    offline={!isOnline(cam, now)}
+                    offline={isDay && !isOnline(cam, now)}
                   />
                 ))}
               </div>
