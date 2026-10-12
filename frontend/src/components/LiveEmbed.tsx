@@ -6,9 +6,10 @@ interface LiveEmbedProps {
   id: string;
   youtubeUrl: string;
   name: string;
+  offline: boolean;
 }
 
-export function LiveEmbed({ id, youtubeUrl, name }: LiveEmbedProps) {
+export function LiveEmbed({ id, youtubeUrl, name, offline }: LiveEmbedProps) {
   const src = embedUrl(youtubeUrl);
   const donate = donateLinks[id];
   const notifyOn = useNotifyPrefs((s) => s.enabled.has(id));
@@ -33,6 +34,14 @@ export function LiveEmbed({ id, youtubeUrl, name }: LiveEmbedProps) {
       </div>
       <div className="text-text-muted flex items-center gap-2 px-4 py-2 text-sm">
         <span>{name}</span>
+        {offline && (
+          <span
+            className="text-text-dim text-xs"
+            title="The detector is not reading this stream, so sightings here are paused"
+          >
+            detector offline
+          </span>
+        )}
         <button
           type="button"
           onClick={() => toggleNotify(id)}

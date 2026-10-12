@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import { supabase } from "./lib/supabase";
+import { useCallback } from "react";
 import { useRealtimeSightings } from "./hooks/useRealtimeSightings";
+import { useCamsPolling } from "./hooks/useCamsPolling";
+import { useNow } from "./hooks/useNow";
 import { useToasts } from "./hooks/useToasts";
 import { StatusBadge } from "./components/StatusBadge";
 import { LiveEmbed } from "./components/LiveEmbed";
@@ -10,9 +11,10 @@ import { ThemeToggle } from "./components/ThemeToggle";
 import { StreamControls } from "./components/StreamControls";
 import { CreditLine } from "./components/CreditLine";
 import { useNotifyPrefs } from "./stores/notifyPrefs";
+import { useCams, isOnline } from "./stores/cams";
 import { useTitleStatus } from "./hooks/useTitleStatus";
 import { playChime } from "./utils/chime";
-import type { Cam, Sighting } from "./types/database";
+import type { Sighting } from "./types/database";
 
 const sectionTitle = "text-sm font-medium text-text-muted mb-2";
 
@@ -22,17 +24,10 @@ const lastSeenAt = new Map<string, number>();
 
 export default function App() {
   const { toasts, push, dismiss } = useToasts();
-  const [cams, setCams] = useState<Cam[]>([]);
+  const cams = useCams((s) => s.cams);
+  const now = useNow();
+  useCamsPolling();
   useTitleStatus();
-
-  useEffect(() => {
-    supabase
-      .from("cams")
-      .select("*")
-      .eq("enabled", true)
-      .order("id")
-      .then(({ data }) => setCams(data ?? []));
-  }, []);
 
   const onNewSighting = useCallback(
     (s: Sighting) => {
@@ -104,6 +99,7 @@ export default function App() {
                   id={cam.id}
                   youtubeUrl={cam.youtube_url}
                   name={cam.name}
+                  offline={!isOnline(cam, now)}
                 />
               ))}
             </div>

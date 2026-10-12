@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSightings, isLive } from "../stores/sightings";
+import { useCams, onlineCamIds } from "../stores/cams";
 import { useNow } from "../hooks/useNow";
 import { ImagePreview } from "./ImagePreview";
 import type { Sighting } from "../types/database";
@@ -71,6 +72,7 @@ const MAX_SHOWN = 10;
 
 export function SightingLog() {
   const sightings = useSightings((s) => s.sightings);
+  const cams = useCams((s) => s.cams);
   const now = useNow();
   const [preview, setPreview] = useState<string | null>(null);
 
@@ -80,7 +82,8 @@ export function SightingLog() {
 
   // Live sightings float to the top, within each group the store's newest-first order
   // (started_at descending) is preserved by the stable sort
-  const live = (s: Sighting) => isLive(s, now);
+  const online = onlineCamIds(cams, now);
+  const live = (s: Sighting) => isLive(s, now, online);
   const ordered = sightings
     .map((s) => ({ s, live: live(s) }))
     .sort((a, b) => Number(b.live) - Number(a.live));

@@ -1,7 +1,7 @@
 // Placeholder for the output of:
 //   supabase gen types typescript --project-id <id> > src/types/database.ts
 // Run that once the Supabase project exists. Until then this hand-written shape
-// mirrors detstream-otterwatch/supabase/migrations/0001_init.sql so the app type-checks.
+// mirrors backend/supabase/migrations so the app type-checks.
 // The deployment owns the schema; regenerate it instead of editing by hand
 
 // These are `type` aliases, not interfaces, on purpose: supabase-js's GenericTable
@@ -22,6 +22,7 @@ export type Cam = {
   name: string;
   youtube_url: string;
   enabled: boolean;
+  last_frame_at: string | null;
 };
 
 export interface Database {

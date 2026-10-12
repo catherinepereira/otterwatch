@@ -48,7 +48,9 @@ to run CPU-only. The worker pushes out to Supabase/Discord, so there is no inbou
 This deployment is the source of truth for its Supabase schema in `supabase/migrations/`:
 - `0001_init.sql`: `cams` and `sightings`. The detstream supabase sink writes sightings,
   and its `feed_id` maps to the `cam_id` column. Realtime is enabled on `sightings` and the
-  frontend subscribes to it.
+  frontend subscribes to it. `cams.last_frame_at` is the worker's heartbeat, stamped about
+  once a minute while a cam's stream is being read. The frontend shows a cam as offline when
+  the stamp is stale.
 
 Apply them through the Supabase SQL editor or CLI, create a `thumbnails` Storage bucket,
 then put the project URL + secret key in `.env` (`DETSTREAM_SUPABASE_URL` /

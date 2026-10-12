@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useSightings, isLive } from "../stores/sightings";
+import { useCams, onlineCamIds } from "../stores/cams";
 import { useNow } from "./useNow";
 
 const BASE_TITLE = "Otterwatch";
@@ -11,10 +12,12 @@ const RAINBOW_INTERVAL_MS = 400;
 // Uses the same liveness as the on-page badge
 export function useTitleStatus(): void {
   const sightings = useSightings((s) => s.sightings);
+  const cams = useCams((s) => s.cams);
   const now = useNow();
 
+  const online = onlineCamIds(cams, now);
   const liveCams = new Set(
-    sightings.filter((s) => isLive(s, now)).map((s) => s.cam_id),
+    sightings.filter((s) => isLive(s, now, online)).map((s) => s.cam_id),
   ).size;
 
   useEffect(() => {

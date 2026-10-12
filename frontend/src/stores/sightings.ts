@@ -7,13 +7,13 @@ interface SightingsState {
   upsert: (row: Sighting) => void;
 }
 
-// A sighting counts as "live" when either:
-//   - it is still open (ended_at null) and started within the last 10 minutes, so a row
-//     the worker never patched (crashed mid-sighting) stops counting as live, or
+// A sighting counts as "live" when its cam is online (the worker's heartbeat is fresh) and
+// either:
+//   - it is still open (ended_at null), or
 //   - it started in the viewer's current local minute, so a fresh sighting shows live
 //     right away even if it already ended this minute
-const LIVE_WINDOW_MS = 10 * 60 * 1000;
-
+// A row left open by a crashed worker stops counting once the heartbeat goes stale, and the
+// worker closes it when it restarts
 function startedThisLocalMinute(started: Date, now: Date): boolean {
   return (
     started.getFullYear() === now.getFullYear() &&
@@ -24,11 +24,16 @@ function startedThisLocalMinute(started: Date, now: Date): boolean {
   );
 }
 
-export const isLive = (s: Sighting, now: number = Date.now()) => {
+export const isLive = (
+  s: Sighting,
+  now: number,
+  onlineCams: ReadonlySet<string>,
+) => {
+  if (!onlineCams.has(s.cam_id)) return false;
   const started = new Date(s.started_at);
   if (Number.isNaN(started.getTime())) return false;
   if (startedThisLocalMinute(started, new Date(now))) return true;
-  return s.ended_at === null && now - started.getTime() < LIVE_WINDOW_MS;
+  return s.ended_at === null;
 };
 
 export const useSightings = create<SightingsState>((set) => ({

@@ -1,3 +1,3 @@
 # The framework, with the extras this deployment uses:
 # YOLO-World detector, YouTube source, Supabase sink.
-detstream[yolo,youtube,supabase]~=0.1.3
+detstream[yolo,youtube,supabase]~=0.2.0

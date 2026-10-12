@@ -1,19 +1,25 @@
 import { useSightings, isLive } from "../stores/sightings";
+import { useCams, onlineCamIds } from "../stores/cams";
 import { useDayNight } from "../hooks/useDayNight";
 import { useNow } from "../hooks/useNow";
 
 export function StatusBadge() {
   const now = useNow();
   const sightings = useSightings((s) => s.sightings);
+  const cams = useCams((s) => s.cams);
+  const online = onlineCamIds(cams, now);
   // Count distinct cams with a live sighting. Per-frame otter counts from a zero-shot
   // detector are unreliable, so a raft is two or more aquariums active at once
   const liveCams = new Set(
-    sightings.filter((x) => isLive(x, now)).map((x) => x.cam_id),
+    sightings.filter((x) => isLive(x, now, online)).map((x) => x.cam_id),
   ).size;
   const isDay = useDayNight();
+  // Cams loaded but none heartbeating: quiet would be a guess, say so instead
+  const offline = cams.length > 0 && online.size === 0;
 
-  const label =
-    liveCams === 0
+  const label = offline
+    ? "detector offline, sightings paused"
+    : liveCams === 0
       ? isDay
         ? "otterly quiet..."
         : "otterly quiet... otters are resting 🌙"

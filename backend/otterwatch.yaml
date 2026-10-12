@@ -27,28 +27,28 @@ sinks:
 feeds:
   - id: monterey-otters
     name: Monterey Bay Aquarium
-    source: { type: youtube, url: "https://www.youtube.com/watch?v=abbR-Ttd-cA" }
+    source: { type: youtube, url: "https://www.youtube.com/watch?v=abbR-Ttd-cA", max_height: 480 }
     detector: *detector
     debounce: *debounce
     sinks: [console, supabase, discord]
 
   - id: vancouver-otters-1
     name: Vancouver Aquarium (Cam 1)
-    source: { type: youtube, url: "https://www.youtube.com/watch?v=9mg9PoFEX2U" }
+    source: { type: youtube, url: "https://www.youtube.com/watch?v=9mg9PoFEX2U", max_height: 480 }
     detector: *detector
     debounce: *debounce
     sinks: [console, supabase, discord]
 
   - id: vancouver-otters-2
     name: Vancouver Aquarium (Cam 2)
-    source: { type: youtube, url: "https://www.youtube.com/watch?v=_KXHUb0wFRE" }
+    source: { type: youtube, url: "https://www.youtube.com/watch?v=_KXHUb0wFRE", max_height: 480 }
     detector: *detector
     debounce: *debounce
     sinks: [console, supabase, discord]
 
   - id: seattle-otters
     name: Seattle Aquarium
-    source: { type: youtube, url: "https://www.youtube.com/watch?v=NqOmHpwMUxs" }
+    source: { type: youtube, url: "https://www.youtube.com/watch?v=NqOmHpwMUxs", max_height: 480 }
     detector: *detector
     debounce: *debounce
     sinks: [console, supabase, discord]

@@ -2,7 +2,10 @@ create table cams (
   id          text primary key,          -- slug, e.g. 'monterey-sea-otters'
   name        text not null,
   youtube_url text not null,
-  enabled     boolean default true
+  enabled     boolean default true,
+  -- Stamped by the detstream supabase sink about once a minute while the worker reads this
+  -- cam's stream. The website shows a cam with a stale stamp as offline
+  last_frame_at timestamptz
 );
 
 create table sightings (
@@ -12,7 +15,8 @@ create table sightings (
   ended_at    timestamptz,               -- null while the otter is still on screen
   confidence  real,                      -- peak confidence during the sighting
   thumbnail   text,                      -- public URL of the triggering frame
-  detector    text                       -- 'yolo-world' | 'grounding-dino' | 'yolo-ft'
+  detector    text,                      -- 'yolo-world' | 'grounding-dino' | 'yolo-ft'
+  label       text                       -- matched class, null for single-class detectors
 );
 
 create index sightings_started_at_idx on sightings (started_at desc);
