@@ -47,6 +47,8 @@
 
   --glow: rgba(0, 147, 208, 0.12);
   --glow-2: rgba(0, 147, 208, 0.06);
+
+  --ripple: #ffffff;
 }
 
 :root[data-theme="light"] {
@@ -69,6 +71,8 @@
 
   --glow: rgba(0, 147, 208, 0.1);
   --glow-2: rgba(0, 147, 208, 0.05);
+
+  --ripple: #0093d0;
 }
 
 body {

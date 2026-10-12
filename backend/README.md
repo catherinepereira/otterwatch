@@ -43,6 +43,19 @@ The image bakes in `otterwatch.yaml` but not `.env`, so pass the secrets at runt
 `--env-file`. Without it the supabase and discord sinks error at startup. Drop `--gpus all`
 to run CPU-only. The worker pushes out to Supabase/Discord, so there is no inbound port.
 
+### macOS
+
+```bash
+cd ~/otterwatch/backend
+uv venv venv --seed --python 3.12   # --seed adds pip, which ultralytics uses to install CLIP
+uv pip install --python venv/bin/python -r requirements.txt
+cp .env.example .env                # then fill it in
+caffeinate -s venv/bin/detstream --config otterwatch.yaml
+```
+
+`caffeinate -s` keeps the Mac awake on power for as long as the worker runs. Closing the lid
+still sleeps it.
+
 ## Database
 
 This deployment is the source of truth for its Supabase schema in `supabase/migrations/`:
