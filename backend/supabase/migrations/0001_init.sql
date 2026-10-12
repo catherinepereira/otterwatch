@@ -1,5 +1,5 @@
 create table cams (
-  id          text primary key,          -- slug, e.g. 'monterey-sea-otters'
+  id          text primary key,          -- slug, e.g. 'monterey-otters'
   name        text not null,
   youtube_url text not null,
   enabled     boolean default true,
@@ -21,6 +21,13 @@ create table sightings (
 
 create index sightings_started_at_idx on sightings (started_at desc);
 
+-- One row per feed in otterwatch.yaml, ids must match the feed ids
+insert into cams (id, name, youtube_url) values
+  ('monterey-otters',    'Monterey Bay Aquarium',      'https://www.youtube.com/watch?v=abbR-Ttd-cA'),
+  ('vancouver-otters-1', 'Vancouver Aquarium (Cam 1)', 'https://www.youtube.com/watch?v=9mg9PoFEX2U'),
+  ('vancouver-otters-2', 'Vancouver Aquarium (Cam 2)', 'https://www.youtube.com/watch?v=_KXHUb0wFRE'),
+  ('seattle-otters',     'Seattle Aquarium',           'https://www.youtube.com/watch?v=NqOmHpwMUxs');
+
 -- The website subscribes to inserts and updates on this table
 alter publication supabase_realtime add table sightings;
 
@@ -31,3 +38,8 @@ alter table cams enable row level security;
 
 create policy "public read sightings" on sightings for select using (true);
 create policy "public read cams" on cams for select using (true);
+
+-- The project does not expose new tables to the Data API automatically, so grant access here.
+-- The site reads as anon. The worker inserts, patches, and cleans up as service_role
+grant select on cams, sightings to anon;
+grant select, insert, update, delete on cams, sightings to service_role;
