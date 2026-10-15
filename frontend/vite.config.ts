@@ -4,6 +4,8 @@ import tailwindcss from "@tailwindcss/vite";
 import { DEV_FRONTEND_PORT } from "./src/config";
 
 export default defineConfig({
+  // Relative so the same build serves from its own domain and from reflect.cv/<path>/
+  base: "./",
   plugins: [react(), tailwindcss()],
   server: {
     port: DEV_FRONTEND_PORT,
