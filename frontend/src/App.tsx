@@ -69,16 +69,16 @@ export default function App() {
           </div>
         </header>
         <p className="text-text-dim mb-6 text-sm">
-          Live video feed sea otter detection using one-shot{" "}
+          Live video feed sea otter detection using a{" "}
           <a
-            href="https://docs.ultralytics.com/models/yolo-world/"
+            href="https://docs.ultralytics.com/models/yolo26/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-accent-light underline underline-offset-2"
           >
-            YOLO-World
+            YOLO26
           </a>{" "}
-          prompting. Enable notifications to get reminded if your favorite
+          model fine-tuned on frames from these cams. Enable notifications to get reminded if your favorite
           otters show up (will only ping if otters return after ten minutes).
           <br />
           Please consider supporting these aquariums and their conservation and

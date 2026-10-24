@@ -16,7 +16,13 @@ python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt  # installs detstream from PyPI with extras
 cp .env.example .env             # then fill in your Supabase keys and Discord webhook
+mkdir models
+cp ../../otterwatch-model/exports/otter-yolo26s.pt models/
 ```
+
+The detector is a YOLO26s fine-tuned on frames from these cams in the sibling
+[otterwatch-model](../../otterwatch-model) repo. `*.pt` is gitignored, so copy the weights
+into `models/` on each machine that runs the worker.
 
 ## Run
 
@@ -35,9 +41,6 @@ sink reads `DETSTREAM_SUPABASE_URL` and `DETSTREAM_SUPABASE_KEY` from `.env`, an
 sink reads `DETSTREAM_DISCORD_WEBHOOK_URL`. Without those vars the sinks error at startup.
 Watch for `sighting on Monterey Bay Aquarium` lines.
 
-On first run YOLO-World downloads its weights (~26MB), and ultralytics fetches CLIP the
-first time the detector runs.
-
 ### Docker
 
 ```bash
@@ -45,7 +48,7 @@ docker build -t otterwatch .
 docker run --restart unless-stopped --gpus all --env-file .env otterwatch
 ```
 
-The image bakes in `otterwatch.yaml` but not `.env`, so pass the secrets at runtime with
+The image bakes in `otterwatch.yaml` and `models/` but not `.env`, so pass the secrets at runtime with
 `--env-file`. Without it the supabase and discord sinks error at startup. Drop `--gpus all`
 to run CPU-only. The worker pushes out to Supabase/Discord, so there is no inbound port.
 
@@ -53,9 +56,10 @@ to run CPU-only. The worker pushes out to Supabase/Discord, so there is no inbou
 
 ```bash
 cd ~/otterwatch/backend
-uv venv venv --seed --python 3.12   # --seed adds pip, which ultralytics uses to install CLIP
+uv venv venv --seed --python 3.12   # --seed adds pip, which ultralytics uses for auto-installs
 uv pip install --python venv/bin/python -r requirements.txt
 cp .env.example .env                # then fill it in
+mkdir -p models                     # then copy otter-yolo26s.pt in from the training machine
 caffeinate -s venv/bin/python run.py --config otterwatch.yaml
 ```
 

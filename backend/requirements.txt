@@ -1,6 +1,6 @@
 # The framework, with the extras this deployment uses:
-# YOLO-World detector, YouTube source, Supabase sink.
-detstream[yolo,youtube,supabase]~=0.2.0
+# fine-tuned YOLO detector, YouTube source, Supabase sink
+detstream[yolo,youtube,supabase]~=0.3.0
 # Sunrise/sunset for the night sleep in snapshot_source.py
 astral~=3.2
 tzdata  # zoneinfo data for slim images without /usr/share/zoneinfo

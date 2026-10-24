@@ -1,7 +1,8 @@
 detector_defaults: &detector
-  type: yolo-world
-  prompt: otter swimming
-  confidence_threshold: 0.35
+  type: yolo
+  # fine-tuned in otterwatch-model, copied from its exports/ (see README)
+  weights: models/otter-yolo26s.pt
+  confidence_threshold: 0.5
 
 debounce_defaults: &debounce
   sample_interval_s: 15.0
@@ -12,7 +13,7 @@ debounce_defaults: &debounce
 sinks:
   supabase:
     bucket: thumbnails
-    detector_label: yolo-world
+    detector_label: yolo-ft
     retention_hours: 3
     thumbnail_width: 960
   # webhook URL comes from DETSTREAM_DISCORD_WEBHOOK_URL in .env.

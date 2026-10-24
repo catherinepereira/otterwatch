@@ -12,6 +12,7 @@ RUN pip3 install --no-cache-dir -r /run/requirements.txt
 
 WORKDIR /run
 COPY otterwatch.yaml run.py snapshot_source.py /run/
+COPY models/ /run/models/
 
-# Pushes out to Supabase/Discord, so there is no inbound port to expose.
+# Pushes out to Supabase/Discord, so there is no inbound port to expose
 CMD ["python3", "run.py", "--config", "/run/otterwatch.yaml"]
