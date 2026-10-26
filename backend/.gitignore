@@ -5,3 +5,5 @@ __pycache__/
 .env
 *.log
 *.pid
+# the deployed detector weights ship with the repo, other .pt files stay out
+!models/otter-yolo26s.pt

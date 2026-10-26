@@ -1,6 +1,6 @@
 detector_defaults: &detector
   type: yolo
-  # fine-tuned in otterwatch-model, copied from its exports/ (see README)
+  # fine-tuned in otterwatch-model, committed copy of its exports/otter-yolo26s.pt
   weights: models/otter-yolo26s.pt
   confidence_threshold: 0.5
 
