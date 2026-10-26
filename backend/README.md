@@ -30,8 +30,8 @@ python run.py --config otterwatch.yaml
 
 `run.py` is `detstream` with this repo's `youtube-snapshot` source registered
 (`snapshot_source.py`). Instead of decoding each live stream continuously, it fetches one ~5s
-HLS segment per `sample_interval_s` (15s) and detects on its first frame, which cuts bandwidth
-by roughly 5x. It also sleeps from sunset until 10 minutes before sunrise (Pacific, the same
+HLS segment per `sample_interval_s` (60s) and detects on its first frame, which cuts bandwidth
+by roughly 20x. It also sleeps from sunset until 10 minutes before sunrise (Pacific, the same
 reference point as the frontend), and the site shows the cams as resting instead of offline.
 
 The feeds list `sinks: [console, supabase, discord]`. Console needs nothing. The supabase
