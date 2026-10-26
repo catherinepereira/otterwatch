@@ -6,7 +6,7 @@ screen, and push sightings to a website (via Supabase Realtime) and Discord.
 This repo is config and deployment only. The pipeline (sources, detector, debounce, sinks)
 is in the detstream package. This repo has the feed config, the database schema for this
 deployment, and a Dockerfile. The website is
-[otterwatch.vercel.app](https://otterwatch.vercel.app).
+[reflect.cv/otterwatch](https://reflect.cv/otterwatch/).
 
 ## Setup
 
@@ -16,13 +16,11 @@ python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt  # installs detstream from PyPI with extras
 cp .env.example .env             # then fill in your Supabase keys and Discord webhook
-mkdir models
-cp ../../otterwatch-model/exports/otter-yolo26s.pt models/
 ```
 
 The detector is a YOLO26s fine-tuned on frames from these cams in the sibling
-[otterwatch-model](../../otterwatch-model) repo. `*.pt` is gitignored, so copy the weights
-into `models/` on each machine that runs the worker.
+[otterwatch-model](../../otterwatch-model) repo. Its weights, `models/otter-yolo26s.pt`
+(about 20MB), are committed. After a retrain, copy the new export over that file and commit it.
 
 ## Run
 
@@ -59,7 +57,6 @@ cd ~/otterwatch/backend
 uv venv venv --seed --python 3.12   # --seed adds pip, which ultralytics uses for auto-installs
 uv pip install --python venv/bin/python -r requirements.txt
 cp .env.example .env                # then fill it in
-mkdir -p models                     # then copy otter-yolo26s.pt in from the training machine
 caffeinate -s venv/bin/python run.py --config otterwatch.yaml
 ```
 
