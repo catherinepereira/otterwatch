@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { isMobile } from "../utils/mobile";
 
 interface Ripple {
   x: number;
@@ -13,9 +14,9 @@ const AMBIENT_MIN_MS = 3500;
 const AMBIENT_MAX_MS = 7000;
 
 /**
- * Fixed decorative canvas behind the app. Draws an expanding ring on click and
- * one at a random spot on an ambient timer. The ring color is the --ripple theme
- * token, so it follows the light/dark toggle.
+ * Fixed decorative canvas behind the app. Draws an expanding ring at a random spot
+ * on an ambient timer, desktop only. The ring color is the --ripple theme token,
+ * so it follows the light/dark toggle
  */
 export function PondRipples() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -29,7 +30,7 @@ export function PondRipples() {
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    if (reduce) return;
+    if (reduce || isMobile()) return;
 
     let dpr = window.devicePixelRatio || 1;
     const resize = () => {
@@ -53,9 +54,6 @@ export function PondRipples() {
       ripples.push({ x, y, born: now() });
       if (ripples.length > 24) ripples.shift();
     };
-
-    const onClick = (e: PointerEvent) => spawn(e.clientX, e.clientY);
-    window.addEventListener("pointerdown", onClick);
 
     const scheduleAmbient = () => {
       const wait =
@@ -102,7 +100,6 @@ export function PondRipples() {
       cancelAnimationFrame(raf);
       clearTimeout(ambientTimer);
       window.removeEventListener("resize", resize);
-      window.removeEventListener("pointerdown", onClick);
     };
   }, []);
 
@@ -110,7 +107,7 @@ export function PondRipples() {
     <canvas
       ref={canvasRef}
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-0 text-[var(--ripple)]"
+      className="pointer-events-none fixed inset-0 z-0 hidden text-[var(--ripple)] md:block"
     />
   );
 }

@@ -78,8 +78,9 @@ export default function App() {
           >
             YOLO26
           </a>{" "}
-          model fine-tuned on frames from these cams. Enable notifications to get reminded if your favorite
-          otters show up (will only ping if otters return after ten minutes).
+          model fine-tuned on frames from these cams. Enable notifications to
+          get reminded if your favorite otters show up (will only ping if otters
+          return after ten minutes).
           <br />
           Please consider supporting these aquariums and their conservation and
           rehabilitation efforts by donating via the 💙!
@@ -114,7 +115,7 @@ export default function App() {
             )}
           </section>
 
-          <section>
+          <section className="order-first lg:order-none">
             <h2 className={sectionTitle}>recent sightings</h2>
             <SightingLog />
           </section>
